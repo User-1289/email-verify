@@ -1,23 +1,28 @@
 import nodemailer from 'nodemailer';
-// Configure the email transport using SMTP
-const googleAcAppKey = process.env.GOOGLE_EMAIL_KEY || '';
-console.log(googleAcAppKey)
 
+const googleAcAppKey = process.env.GOOGLE_EMAIL_KEY || '';
+
+// Configure the email transport using SMTP
 const transporter = nodemailer.createTransport({
-  //host: 'smtp.example.com', // Replace with your SMTP host
-  //port: 587, // Replace with your SMTP port
-  //secure: false, // Use true for 465, false for other ports
-  service:"Gmail",
+  service: 'Gmail',
   auth: {
-    user: 'deverse.space@gmail.com', // Replace with your email
-    pass:googleAcAppKey
+    user: 'deverse.space@gmail.com',
+    pass: googleAcAppKey,
   },
 });
 
-export async function sendConfirmEmail(verificationCode:string, recipientEmail:string) {
-  // Define the email options
+// Verify connection configuration
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('Error with SMTP configuration:', error);
+  } else {
+    console.log('SMTP configuration is correct:', success);
+  }
+});
+
+export async function sendConfirmEmail(verificationCode, recipientEmail) {
   const mailOptions = {
-    from: 'deverse.space@gmail.com', // Replace with your sender address
+    from: 'deverse.space@gmail.com',
     to: recipientEmail,
     subject: 'Your Verification Code',
     html: `
@@ -83,13 +88,15 @@ export async function sendConfirmEmail(verificationCode:string, recipientEmail:s
   };
 
   try {
+    // Verify SMTP connection before sending email
+    await transporter.verify();
+
     // Send the email
     await transporter.sendMail(mailOptions);
     console.log('Verification email sent successfully');
-    return {status:'success'}
+    return { status: 'success' };
   } catch (error) {
     console.error('Error sending verification email:', error);
-    return {status:'fail', error:error}
-    throw new Error('Unable to send verification email');
+    return { status: 'fail', error: error.message };
   }
 }
