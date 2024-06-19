@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 // Configure the email transport using SMTP
 const googleAcAppKey = process.env.GOOGLE_EMAIL_KEY || '';
-
+console.log(googleAcAppKey)
 
 const transporter = nodemailer.createTransport({
   //host: 'smtp.example.com', // Replace with your SMTP host
