@@ -33,7 +33,7 @@ export async function handler(event:any, context:any) {
             await client.del(userEmailId)
             return{
                 statusCode:200,
-                body:JSON.stringify({message:'Verified successfully'})
+                body:JSON.stringify({code:200,message:'Verified successfully'})
              }
          } 
          else if(codeEntered!==getActualCode){

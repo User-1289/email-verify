@@ -28,7 +28,7 @@ export async function handler(event:any, context:any) {
             sendConfirmEmail(code,userEmailId)
             return{
                 statusCode:200,
-                body:JSON.stringify({message:"Verification code successfully sent, Check your inbox"})
+                body:JSON.stringify({code:200, message:"Verification code successfully sent, Check your inbox"})
             }
         } else if(saveCodeResponse.status!="success"){
             return {
