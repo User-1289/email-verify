@@ -25,7 +25,7 @@ export async function handler(event:any, context:any) {
         let code =  createCode()
         let saveCodeResponse = await saveCode(client,userEmailId,code);
         if(saveCodeResponse.status==="success"){
-            sendConfirmEmail(code,userEmailId)
+            await sendConfirmEmail(code,userEmailId)
             return{
                 statusCode:200,
                 body:JSON.stringify({code:200, message:"Verification code successfully sent, Check your inbox"})

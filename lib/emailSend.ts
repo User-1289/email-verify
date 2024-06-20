@@ -4,7 +4,12 @@ const googleAcAppKey = process.env.GOOGLE_EMAIL_KEY || '';
 
 // Configure the email transport using SMTP
 const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
   service: 'Gmail',
+  tls: {
+    ciphers: "SSLv3",
+},
+  secure:false,
   auth: {
     user: 'deverse.space@gmail.com',
     pass: googleAcAppKey,
@@ -92,17 +97,7 @@ export async function sendConfirmEmail(verificationCode:string, recipientEmail:s
     await transporter.verify();
 
     // Send the email
-    //await transporter.sendMail(mailOptions);
-    await new Promise((resolve, reject) => {
-      transporter.sendMail(mailOptions, (err:any, info:any) => {
-        if (err) {
-          console.error(err);
-          reject(err);
-        } else {
-          resolve(info);
-        }
-      });
-    });
+    await transporter.sendMail(mailOptions);
     console.log('Verification email sent successfully');
     return { status: 'success' };
   } catch (error) {
