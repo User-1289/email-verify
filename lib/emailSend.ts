@@ -20,7 +20,7 @@ transporter.verify((error, success) => {
   }
 });
 
-export async function sendConfirmEmail(verificationCode, recipientEmail) {
+export async function sendConfirmEmail(verificationCode:string, recipientEmail:string) {
   const mailOptions = {
     from: 'deverse.space@gmail.com',
     to: recipientEmail,
@@ -92,7 +92,17 @@ export async function sendConfirmEmail(verificationCode, recipientEmail) {
     await transporter.verify();
 
     // Send the email
-    await transporter.sendMail(mailOptions);
+    //await transporter.sendMail(mailOptions);
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, (err:any, info:any) => {
+        if (err) {
+          console.error(err);
+          reject(err);
+        } else {
+          resolve(info);
+        }
+      });
+    });
     console.log('Verification email sent successfully');
     return { status: 'success' };
   } catch (error) {
